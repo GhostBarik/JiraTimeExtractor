@@ -4,7 +4,7 @@ name := "ScalaJsTemplate"
 
 version := "1.0"
 
-scalaVersion := "2.11.9"
+scalaVersion := "2.11.8"
 
 libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.9.0"
 libraryDependencies += "be.doeraene" %%% "scalajs-jquery" % "0.9.0"

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <title>Extractor</title>
+
+    <!-- Bootstrap css -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom css for footer -->
+    <link href="css/custom/footer.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <div style="width: 50%" class="container" role="main">
+
+        <div class="row">
+            <div class="col-md-12">
+                <div style="margin-bottom: 15px;" class="jumbotron">
+                    <p>Insert json taken from JIRA and press "Calculate" button...</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div id="successMessage" style="display: none" class="alert alert-success" role="alert">
+                    <strong>Your json was successfully parsed!</strong>
+                </div>
+                <div id="warningMessage" style="display: none" class="alert alert-warning" role="alert">
+                    <strong>Json was successfully parsed, but its structure doesn't conform to the JIRA format!</strong>
+                </div>
+                <div id="errorMessage" style="display: none" class="alert alert-danger" role="alert">
+                    <strong>Json is invalid!</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <textarea id="textarea" style="width: 100%; margin-bottom: 10px;" rows="5">Insert your json here...</textarea>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <button id="extractButton" type="button" class="btn-lg btn-primary">Extract and calculate worktime</button>
+            </div>
+        </div>
+
+        <div style="display: none;" id="tabs">
+
+            <ul style="margin-top: 20px;" class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#menu1">Total time</a></li>
+                <li><a data-toggle="tab" href="#menu2">Grouped by user</a></li>
+                <li><a data-toggle="tab" href="#menu3">Grouped by task</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div id="menu1" class="tab-pane fade in active"></div>
+                <div id="menu2" class="tab-pane fade"></div>
+                <div id="menu3" class="tab-pane fade"></div>
+            </div>
+        </div>
+    </div>
+
+
+    <footer class="footer">
+        <div id="footer-container" class="container">
+            <p class="text-muted">Powered by Scala.js and Bootstrap</p>
+        </div>
+    </footer>
+
+</body>
+
+<!-- JQuery -->
+<script type="text/javascript" src="jquery-2.2.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="js/bootstrap.min.js"></script>
+
+<!-- Scala.js (application code) -->
+<script type="text/javascript" src="../target/scala-2.11/scalajstemplate-fastopt.js"></script>
+
+<!-- call main method() from application -->
+<script type="text/javascript">
+    webapp.Main().main();
+</script>
+
+</html>

@@ -4,7 +4,7 @@ This simple app allows you to insert json taken from JIRA worklog-query:
 ```JavaScript
 http://host/jira/rest/jira-worklog-query/1.2.1/find/worklogs?startDate=2016-06-01&endDate=2016-06-30&user=VojTos
 ```
-then axtract and calculate total time, spending on different tasks by different users. 
+and then extract and calculate total time, spending on different tasks by different users. 
 
 ## Prerequisites
 **You should have installed and properly configured:**

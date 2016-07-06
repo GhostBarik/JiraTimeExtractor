@@ -26,9 +26,8 @@ object Main extends JSApp {
       // parse input text and analyze results
       parseAndCalculate(jq("textarea").getValue) match {
 
-        case Success(parsed) =>
-          showResult(parsed)
-          showSuccessMessage()
+        case Success(parsed) => showResult(parsed)
+                                showSuccessMessage()
 
         case Failure(e) => showErrorMessage(e)
       }
@@ -51,8 +50,6 @@ object Main extends JSApp {
     // try to parse input string
     val parsed = Try(json.read(escaped))
 
-    println("check if parsed: " + parsed.isSuccess)
-
     // in the case of success => extract data from inner array
     parsed.map{ jsonTree =>
 
@@ -67,7 +64,7 @@ object Main extends JSApp {
     }.recover{ // convert exceptions
 
       case e: Invalid.Json => throw e // json parsing exception
-      case _ => throw JsonStructureException() // incorrect json structure exception
+      case _ => throw new JsonStructureException // incorrect json structure exception
     }
   }
 
@@ -90,7 +87,12 @@ object Main extends JSApp {
     // create table of total calculated time
     val totalTime = createTable(
       List("Hours (H)", "Days (MD)"),
-      List(List("%1.1f".format(totalHours), "%1.1f".format(totalDays)))
+      List(
+        List(
+          "%1.1f".format(totalHours),
+          "%1.1f".format(totalDays)
+        )
+      )
     )
 
     // group results by applying given selector
@@ -105,8 +107,15 @@ object Main extends JSApp {
     }
 
     // group records (by users and by issues) and create table
-    val groupedByUsers = createTable(List("User", "Hours (H)", "Days (MD)"), grouped(_.userId))
-    val groupedByIssues = createTable(List("Task", "Hours (H)", "Days (MD)"), grouped(_.issueKey))
+    val groupedByUsers = createTable(
+      List("User", "Hours (H)", "Days (MD)"),
+      grouped(_.userId)
+    )
+
+    val groupedByIssues = createTable(
+      List("Task", "Hours (H)", "Days (MD)"),
+      grouped(_.issueKey)
+    )
 
     // insert calculated tables in DOM
     insertNewTable("menu1", totalTime.render)
@@ -120,8 +129,8 @@ object Main extends JSApp {
   val htmlCache = List(
     "tabs", "menu1", "menu2", "menu3",
     "textarea", "errorMessage", "extractButton",
-    "successMessage", "warningMessage")
-    .map(id => id -> document.getElementById(id)).toMap
+    "successMessage", "warningMessage"
+  ).map(id => id -> document.getElementById(id)).toMap
 
   /**
     * cached version of JQuery selector (to avoid overhead of element searching in DOM)

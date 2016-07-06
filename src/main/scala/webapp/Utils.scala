@@ -45,7 +45,7 @@ object Utils {
   /**
     * exception, that is thrown in the case where json structure doesn't conform to the JIRA output format
     */
-  case class JsonStructureException() extends Exception
+  class JsonStructureException extends Exception
 
   /**
     * Implicit wrapper, extending JQuery object by new utility method -> getValue()

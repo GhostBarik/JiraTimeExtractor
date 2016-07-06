@@ -15,12 +15,12 @@ and then extract and calculate total time, spending on different tasks by differ
 
 
 ## How to build application
-1. Go to the project root folder
-2. Run `sbt` from the command line
-3. Build application by running `fullOptJS` (it will generated the minified version of script)
-4. open `view/extractor.html` and check if the path to generated JavaScript conforms to the generated JavaScript (from `target/scala-2.11`). For example if generated file has name 
-```scalajstemplate-opt.js``` full path in `view/extractor.html` should look like  ```<script type="text/javascript" src="../target/scala-2.11/scalajstemplate-opt.js"></script>``` 
+1. Go to the project root folder.
+2. Run `sbt` from the command line.
+3. Build application by running `fullOptJS` (it will generate the minified version of script).
+4. open `view/jira-time-extractor.html` and check if the path to generated JavaScript conforms to the generated JavaScript (from `target/scala-2.11`). For example if generated file has name 
+```scalajstemplate-opt.js``` full path in `view/jira-time-extractor.html` should look like  ```<script type="text/javascript" src="../target/scala-2.11/scalajstemplate-opt.js"></script>```.
 Correct this if needed.
 
 ## How to run application
-1. Go to `view` folder and open `extractor.html` in your favorite browser.
+1. Go to `view` folder and open `jira-time-extractor.html` in your favorite browser.

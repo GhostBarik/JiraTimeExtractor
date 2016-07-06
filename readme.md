@@ -10,7 +10,7 @@ and then extract and calculate total time, spending on different tasks by differ
 **You should have installed and properly configured:**
 - Java JDK (>= 7)
 - Scala (version >= [2.11.8](http://www.scala-lang.org/download/2.11.8.html))
-- Simple Build Tool (SBT) (version >= [0.13.11](http://www.scala-sbt.org/download.html)) for building Scala (JVM) and Scala.js projects
+- Simple Build Tool (SBT) (version >= [0.13.9](http://www.scala-sbt.org/download.html)) for building Scala (JVM) and Scala.js projects
 
 
 

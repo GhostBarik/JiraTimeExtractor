@@ -7,7 +7,8 @@ import upickle.Js.{Arr => JsArray, Num => JsNumber, Obj => JsObject, Str => JsSt
 import upickle.{Invalid, json}
 import webapp.Utils._
 
-import scala.scalajs.js.JSApp
+import scala.collection.immutable.TreeMap
+import scala.scalajs.js.{JSApp, Date => JsDate}
 import scala.util.{Failure, Success, Try}
 
 /**
@@ -95,39 +96,52 @@ object Main extends JSApp {
       )
     )
 
-    // group results by applying given selector
-    def grouped(selector: TimeRecord => String) = {
-      results
-        .groupBy(selector)
-        .map{ case (k,v) =>
-          List(k,
-            format(sumUpHours(v)),
-            format(sumUpDays(v)))
-        }.toList
-    }
+    // aggregate list of time records for each value in map
+    def aggregate[K](m: Map[K, Seq[TimeRecord]]): List[List[String]] =
+      m.mapValues( v => (format(sumUpHours(v)), format(sumUpDays(v))))
+        .map{ case (k, (v1, v2)) => List(k.toString, v1, v2)}.toList
 
     // group records (by users and by issues) and create table
     val groupedByUsers = createTable(
-      List("User", "Hours (H)", "Days (MD)"),
-      grouped(_.userId)
+      List("User", "Hours (H)", "Days (D)"),
+      aggregate(results.groupBy(_.userId))
     )
 
     val groupedByIssues = createTable(
-      List("Task", "Hours (H)", "Days (MD)"),
-      grouped(_.issueKey)
+      List("Task", "Hours (H)", "Days (D)"),
+      aggregate(results.groupBy(_.issueKey))
+    )
+
+    val groupedByDate = createTable(
+      List("Date", "Hours (H)", "Days (D)"),
+      aggregate(
+        // treeMap sorts all their records by keys
+        TreeMap(results.groupBy(_.startDate).toSeq: _*)
+      )
+    )
+
+    val groupedByWeek = createTable(
+      List("Week", "Hours (H)", "Days (D)"),
+      aggregate(
+        // treeMap sorts all their records by keys
+        TreeMap(results.groupBy(_.startDate.weekBounds).toSeq: _*)
+          .map{ case ((d1,d2),v) => (d1.toString + " -> " + d2, v) }
+      )
     )
 
     // insert calculated tables in DOM
     insertNewTable("menu1", totalTime.render)
     insertNewTable("menu2", groupedByUsers.render)
     insertNewTable("menu3", groupedByIssues.render)
+    insertNewTable("menu4", groupedByDate.render)
+    insertNewTable("menu5", groupedByWeek.render)
   }
 
   /**
     * cached map of html elements (for speeding up JQuery selectors)
     */
   val htmlCache = List(
-    "tabs", "menu1", "menu2", "menu3",
+    "tabs", "menu1", "menu2", "menu3", "menu4", "menu5",
     "textarea", "errorMessage", "extractButton",
     "successMessage", "warningMessage"
   ).map(id => id -> document.getElementById(id)).toMap
@@ -171,7 +185,9 @@ object Main extends JSApp {
     val JsString(userId) = obj("userId")
     val JsNumber(duration) = obj("duration")
 
-    TimeRecord(id.toInt, startDate, issueKey, userId, duration.toInt)
+    val jsDate = new JsDate(startDate)
+
+    TimeRecord(id.toInt, toImmutableDate(jsDate), issueKey, userId, duration.toInt)
   }
 
   def showSuccessMessage() {
